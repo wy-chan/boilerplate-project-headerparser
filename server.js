@@ -19,15 +19,24 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-
 // your first API endpoint... 
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-
-
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
+});
+
+let resObject = {};
+
+app.enable("trust proxy");//enable to show ip
+
+app.get("/api/whoami", (req, res) => {
+  resObject.ipaddress = req.ip;
+  resObject.language = req.get("Accept-Language");
+  resObject.software = req.get("User-Agent");
+  
+  res.json(resObject);
 });
